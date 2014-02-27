@@ -41,7 +41,43 @@ singleton.save = function(collectionName, item) {
                 else
                     deferred.resolve(result);
             } else {
-                console.log("error processing save");
+                deferred.reject(err);
+            }
+        });
+    });
+
+    return deferred.promise;   
+};
+
+singleton.clear = function(collectionName) {
+    var deferred = q.defer();
+
+    singleton.getDB().then(function(db) {
+
+        var collection = db.collection(collectionName);
+        collection.remove(null, null, function(err, result) {
+            if (err === null) {
+                deferred.resolve();
+            } else {                
+                deferred.reject(err);
+            }
+        });
+    });
+
+    return deferred.promise;   
+};
+
+singleton.count = function() {
+     var deferred = q.defer();
+
+    singleton.getDB().then(function(db) {
+
+        var collection = db.collection(collectionName);
+        collection.count(null, null, function(err, count) {
+            console.log(err);
+            if (err === null) {
+                deferred.resolve(count);
+            } else {                
                 deferred.reject(err);
             }
         });
@@ -56,12 +92,4 @@ singleton.close = function() {
     singleton.db.close();
 };
 
-
-// access example
-singleton.save("foo2", {name: "hi"}).then(function(result) {
-    result.name = "blah";
-    singleton.save("foo2", result).then(function(result) {
-    });
-});
-
-
+module.exports = singleton;
