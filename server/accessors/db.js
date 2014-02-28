@@ -67,13 +67,14 @@ singleton.clear = function(collectionName) {
     return deferred.promise;   
 };
 
-singleton.count = function() {
-     var deferred = q.defer();
+singleton.count = function(collectionName) {
+    var deferred = q.defer();
 
     singleton.getDB().then(function(db) {
 
-        var collection = db.collection(collectionName);
-        collection.count(null, null, function(err, count) {
+        var collection = db.collection(collectionName); 
+
+        collection.count(function(err, count) {
             console.log(err);
             if (err === null) {
                 deferred.resolve(count);
@@ -83,7 +84,7 @@ singleton.count = function() {
         });
     });
 
-    return deferred.promise;   
+    return deferred.promise;    
 };
 
 // close the database

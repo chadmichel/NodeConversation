@@ -26,7 +26,7 @@ describe('db', function(){
 					assert.equal(obj.name, result.name);
 
 					db.count("tester").then(function(count) {
-						assert.equal(2, count);	
+						assert.equal(1, count);	
 						done();
 					});
 				});
