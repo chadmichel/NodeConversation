@@ -49,13 +49,51 @@ singleton.save = function(collectionName, item) {
     return deferred.promise;   
 };
 
-singleton.clear = function(collectionName) {
+// Find a record to the database
+singleton.find = function(collectionName, id) {
     var deferred = q.defer();
 
     singleton.getDB().then(function(db) {
 
         var collection = db.collection(collectionName);
-        collection.remove(null, null, function(err, result) {
+        collection.findOne({ _id: id}, function(err, result) {            
+            if (err === null) {
+                deferred.resolve(result);
+            } else {
+                deferred.reject(err);
+            }
+        });
+    });
+
+    return deferred.promise;   
+};
+
+// Find a record to the database
+singleton.findMany = function(collectionName, query) {
+    var deferred = q.defer();
+
+    singleton.getDB().then(function(db) {
+
+        var collection = db.collection(collectionName);
+        collection.find(query).toArray(function(err, result) {        
+            if (err === null) {
+                deferred.resolve(result);
+            } else {
+                deferred.reject(err);
+            }
+        });
+    });
+
+    return deferred.promise;   
+};
+
+singleton.clear = function(collectionName, query) {
+    var deferred = q.defer();
+
+    singleton.getDB().then(function(db) {
+
+        var collection = db.collection(collectionName);
+        collection.remove(query, null, function(err, result) {
             if (err === null) {
                 deferred.resolve();
             } else {                
