@@ -2,7 +2,7 @@
 
 var q = require('q'),
 	db = require('./db'),
-	collection = "conversations";
+	collection = "users";
 
 
 var singleton = { };
@@ -15,8 +15,8 @@ singleton.save = function(conversation) {
 	return db.save(collection, conversation);
 };
 
-singleton.findActiveForUser = function(userId) {
-	return db.findMany(collection, { "users.id": userId });
+singleton.findAll = function() {
+	return db.findMany(collection);
 };
 
 singleton.clearTests = function() {
