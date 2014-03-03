@@ -1,1 +1,43 @@
-<p>Conversations</p>
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">CHAT</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#about">Stats</a></li>
+        <li><a href="#contact">Users</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>  
+
+<div class="col-md-6 col-sm-6">
+  <div class="list-group">
+
+    <a class="list-group-item" 
+      ng-repeat="conversation in conversations"
+      ng-click="open(conversation)"
+      ng-class="{active: conversation.active}">{{conversation.title}}</a>
+
+  </div>
+</div>
+
+<div class="col-md-6 col-sm-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Panel title</h3>
+    </div>
+    <div class="panel-body">
+      Panel content
+    </div>
+  </div>
+</div>

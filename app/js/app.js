@@ -2,15 +2,18 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', [
+angular.module('chat', [
   'ngRoute',
-  'myApp.filters',
-  'myApp.services',
-  'myApp.directives',
-  'myApp.controllers'
+  'chat.filters',
+  'chat.services',
+  'chat.directives',
+  'chat.controllers'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/conversations', {templateUrl: 'partials/conversations.html', controller: 'ConversationsCtrl'});
-  $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: 'MyCtrl2'});
-  $routeProvider.otherwise({redirectTo: '/conversations'});
+  $routeProvider.when('/conversations/:id', 
+  	{templateUrl: 'partials/conversations.html', controller: 'ConversationsCtrl'});  
+  $routeProvider.when('/poop', 
+  	{templateUrl: 'partials/conversations.html', controller: 'ConversationsCtrl'});  
+  
+  //$routeProvider.otherwise({redirectTo: '/conversations/0'});
 }]);
