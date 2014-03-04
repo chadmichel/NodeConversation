@@ -1,9 +1,18 @@
 'use strict';
 
-/* Services */
-
-
 // Demonstrate how to register services
 // In this case it is a simple value service.
-angular.module('chat.services', []).
-  value('version', '0.1');
+angular.module('chat.services', ['ngSocket'])
+  	.service('ConversationApi', ['$window', 'ngWebSocket', function($window, ngWebSocket) {
+
+		function ConversationApi() {
+			var self = this;
+
+			self.init = function () {
+
+			};
+
+		}
+
+  		return new ConversationApi();
+  	}]);
