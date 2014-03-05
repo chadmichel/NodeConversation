@@ -42,6 +42,18 @@ HttpServer.prototype.start = function(port) {
   this.port = port;
   this.server.listen(port);
   util.puts('Http Server running at http://localhost:' + port + '/');
+
+  this.io = require('socket.io').listen(this.server);
+  this.cm = require('../server/managers/conversationmanager.js')(this.io.sockets);
+
+
+    this.io.sockets.on('connection', function(socket) {
+
+        socket.emit("news", {hello: "world"});
+        socket.on('my other event', function (data) {
+          console.log(data);
+        });
+    });
 };
 
 HttpServer.prototype.parseUrl_ = function(urlString) {

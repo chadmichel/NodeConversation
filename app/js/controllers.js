@@ -7,9 +7,6 @@ angular.module('chat.controllers', []).
   	['$scope', '$routeParams', '$location', '$rootScope', 'ConversationApi', 
   	function($scope, $routeParmas, $location, $rootScope, conversationApi) {
 
-  		console.log($location.path());
-	  	console.log("id " + $routeParmas.id);
-
 	  	conversationApi.init();
 
 	  	$scope.conversations = [
