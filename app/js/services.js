@@ -12,9 +12,18 @@ angular.module('chat.services', ['ngSocket'])
 
 			self.init = function () {
 				var socket = io.connect('http://localhost');
-				socket.emit("allActiveForUser", {my: "data"});
-				socket.on('ConversationManager.allActiveForUser.result', function (data) {
+				
+				socket.on('allActiveForUser_result', function (data) {
+					console.log("result");
 					console.log(data);
+				});
+
+				socket.on('comm_check', function(data) {	
+					// a basic message has returned from the server, world probably ok.
+					console.log("come check = " + data);
+					if (data == true) {
+						socket.emit("allActiveForUser", {hello: "world"});					
+					}
 				});
 			};
 

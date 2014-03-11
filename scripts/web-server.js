@@ -7,6 +7,7 @@ url = require('url'),
 events = require('events');
 
 var DEFAULT_PORT = 8000;
+var server;
 
 function main(argv) {
   new HttpServer({
@@ -39,21 +40,20 @@ function createServlet(Class) {
 }
 
 HttpServer.prototype.start = function(port) {
+  server = this;
   this.port = port;
   this.server.listen(port);
   util.puts('Http Server running at http://localhost:' + port + '/');
 
-  this.io = require('socket.io').listen(this.server);
-  this.cm = require('../server/managers/conversationmanager.js')(this.io.sockets);
+  this.io = require('socket.io').listen(this.server);  
 
+  this.io.sockets.on('connection', function(socket) {
 
-    this.io.sockets.on('connection', function(socket) {
+        socket.emit("comm_check", true);
 
-        socket.emit("news", {hello: "world"});
-        socket.on('my other event', function (data) {
-          console.log(data);
-        });
-    });
+        // initialize managers
+        server.cm = new require('../server/managers/conversationmanager.js')(socket);
+    });   
 };
 
 HttpServer.prototype.parseUrl_ = function(urlString) {
