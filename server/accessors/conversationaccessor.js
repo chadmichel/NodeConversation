@@ -25,6 +25,13 @@ singleton.clearTests = function() {
 
 singleton.fake = function() {
 
+var conversations = 
+	[
+	{ id: 1, title: "about nothing...", active: false },
+	{ id: 2, title: "more about nothing...", active: true}
+	];
+
+	return conversations;
 };
 
 module.exports = singleton;

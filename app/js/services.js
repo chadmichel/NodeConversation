@@ -16,8 +16,8 @@ angular.module('chat.services', ['ngSocket'])
 				var socket = io.connect('http://localhost');
 				
 				socket.on('allActiveForUser_result', function (data) {
-					console.log("result");
-					console.log(data);					
+					// we received a conversation update from server. 
+					// Push this update.
 
 					if (data != null && data.conversations != null) {
 

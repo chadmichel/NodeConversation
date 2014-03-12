@@ -46,13 +46,16 @@ HttpServer.prototype.start = function(port) {
   util.puts('Http Server running at http://localhost:' + port + '/');
 
   this.io = require('socket.io').listen(this.server);  
+  
+  server.cm = new require('../server/managers/conversationmanager.js');
 
   this.io.sockets.on('connection', function(socket) {
 
+        socket.userId = 1;
         socket.emit("comm_check", true);
 
         // initialize managers
-        server.cm = new require('../server/managers/conversationmanager.js')(socket);
+        server.cm.listen(socket);      
     });   
 };
 
