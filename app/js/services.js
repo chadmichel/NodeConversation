@@ -5,17 +5,31 @@ var clientSocket = io.connect('http://localhost');
 // Demonstrate how to register services
 // In this case it is a simple value service.
 angular.module('chat.services', ['ngSocket'])
-  	.service('ConversationApi', ['$window', 'ngWebSocket', function($window, ngWebSocket) {
+  	.service('ConversationApi', ['$window', 'ngWebSocket', '$rootScope', function($window, ngWebSocket, $rootScope) {
 
 		function ConversationApi() {
 			var self = this;
+
+			self.conversations = [];
 
 			self.init = function () {
 				var socket = io.connect('http://localhost');
 				
 				socket.on('allActiveForUser_result', function (data) {
 					console.log("result");
-					console.log(data);
+					console.log(data);					
+
+					if (data != null && data.conversations != null) {
+
+						$rootScope.$apply(function() {
+							self.conversations.length = 0;
+
+							data.conversations.forEach(function(c) {
+								console.log(c.title);
+								self.conversations.push(c);
+							});
+						});
+					}
 				});
 
 				socket.on('comm_check', function(data) {	
@@ -25,6 +39,10 @@ angular.module('chat.services', ['ngSocket'])
 						socket.emit("allActiveForUser", {hello: "world"});					
 					}
 				});
+			};
+
+			self.activeConversations = function() {
+				return self.conversations;
 			};
 
 		}

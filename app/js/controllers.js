@@ -9,10 +9,7 @@ angular.module('chat.controllers', []).
 
 	  	conversationApi.init();
 
-	  	$scope.conversations = [
-	  		{ id: 1, title: "about nothing...", active: false },
-	  		{ id: 2, title: "more about nothing...", active: true}
-	  		];
+	  	$scope.conversations = conversationApi.activeConversations();
 
 	  	$scope.open = function(conversation) {	  	
 	  		console.log('open');

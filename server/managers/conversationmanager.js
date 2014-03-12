@@ -1,4 +1,9 @@
 
+var conversations = 
+	[
+	{ id: 1, title: "about nothing...", active: false },
+	{ id: 2, title: "more about nothing...", active: true}
+	];
 
 function ConversationManager(socket) {
 	var self = this;
@@ -8,7 +13,7 @@ function ConversationManager(socket) {
         console.log("allActiveForUser");
         console.log(data);
 
-        self.socket.emit("allActiveForUser_result", { data: 'hi'});
+        self.socket.emit("allActiveForUser_result", { conversations: conversations});
     });
 
 	console.log("cm init");

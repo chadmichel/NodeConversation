@@ -23,4 +23,8 @@ singleton.clearTests = function() {
 	return db.clear(collection, { isTest: true})
 };
 
+singleton.fake = function() {
+
+};
+
 module.exports = singleton;
