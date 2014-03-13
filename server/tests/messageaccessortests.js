@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+var assert = require('assert');
+var ca = require("../accessors/messageaccessor.js");
+
+describe('MessageAccessor', function(){
+	describe('find', function(){
+		it('should return an object if it exists', function(done) {			
+			ca.clearTests().then(function() {
+				var obj = { conversationId: "1", isTest: true, message: 'something'};
+				ca.save(obj).then(function(result) {					
+					ca.find(result._id).then(function(result2) {
+						assert.equal(result.message, result2.message);
+						done();
+					});					
+				});			
+			});
+		})
+	})
+});
+
+describe('MessageAccessor', function(){
+	describe('find all for conversation', function(){
+		it('should return if conversation is linked', function(done) {			
+			ca.clearTests().then(function() {
+				var obj = { conversationId: "1", isTest: true, message: 'something'};
+				ca.save(obj).then(function(result) {					
+					ca.findAllForConversation("1").then(function(result2) {
+						console.log("returned " + result2.length);
+						assert.equal(1, result2.length);
+						done();
+					});					
+				});			
+			});
+		})
+	})
+});

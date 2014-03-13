@@ -37,7 +37,31 @@
       <h3 class="panel-title">{{conversation.title}}</h3>
     </div>
     <div class="panel-body">
-      Panel content
+      <div>
+          <div class="media" ng-repeat="m in messages">
+              <a href="#" ng-class="{'pull-left': m.userId != myUserId, 'pull-right': m.userId == myUserId }">
+                  <img class="media-object desaturate" ng-src="{{m.userImage}}" alt="User image" height="64" width="64">
+              </a>
+
+              <div class="media-body">
+                  {{m.message}}
+              </div>
+          </div>
+
+      </div>
+
+      <hr />
+
+      <div>
+
+          <form role="form" ng-submit="newMessage()">
+
+              <textarea rows="10" class="form-control" ng-model="$parent.newMessageText"></textarea>
+              <button class="btn" type="submit">Send</button>
+
+          </form>
+      </div>
+
     </div>
   </div>
 </div>
