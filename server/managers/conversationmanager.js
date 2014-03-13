@@ -1,5 +1,6 @@
 
-var ca = require("../accessors/conversationAccessor.js");
+var ca = require("../accessors/conversationAccessor.js"),
+	ma = require("../accessors/messageaccessor.js");
 
 function ConversationManager() {
 	var self = this;
@@ -14,7 +15,20 @@ function ConversationManager() {
 
 	    socket.on('addMessage', function(data) {
 	    	ca.find(data.id).then(function(conversation) {
-	    		socket.emit("addMessage_result", { conversation: conversation});
+
+	    		var message = { conversationId: data.id, isTest: false, message: data.message };
+
+	    		ma.save(message).then(function(result) {
+	    			socket.emit("addMessage_result", { id: data.id, message: result});
+	    		});
+	    	});
+	    });
+
+	    socket.on('findConversation', function(data) {
+	    	ca.find(data.id).then(function(conversation) {
+	    		console.log("found for " + data.id);
+	    		console.log(conversation);
+	    		socket.emit("findConversation_result", { conversation: conversation});
 	    	});
 	    });
 

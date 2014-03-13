@@ -47,14 +47,15 @@ angular.module('chat.services', ['ngSocket'])
 
 	}])
   	.service('ConversationApi', 
-  		['$window', 'ngWebSocket', '$rootScope', 'UserApi', 'Comm', 
-  		function($window, ngWebSocket, $rootScope, userApi, comm) {
+  		['$window', 'ngWebSocket', '$rootScope',  '$q', 'UserApi', 'Comm', 
+  		function($window, ngWebSocket, $rootScope, $q, userApi, comm) {
 
 		function ConversationApi() {
 			var self = this;
 			self.socket = null;
 
 			self.conversations = [];
+			self.findPromise = null;
 
 			self.init = function () {
 				self.socket = comm.connect();
@@ -87,15 +88,27 @@ angular.module('chat.services', ['ngSocket'])
 				self.socket.on('addMessage_result', function(data) {
 					console.log("message result");
 				});
+
+				self.socket.on("findConversation_result", function(data) {
+					console.log("findConversation_result");
+					console.log(data);
+					self.findPromise.resolve(data.conversation);
+				});
 			};
 
 			self.activeConversations = function() {
 				return self.conversations;
 			};
 
-			self.addMessage = function(conversation, message) {
+			self.addMessage = function(conversation, message) {				
 				userApi.myUserId();
 				self.socket.emit('addMessage', {id: conversation._id, message: message});
+			};
+
+			self.find = function(conversationId) {
+				self.findPromise = $q.defer();				
+				self.socket.emit("findConversation", { id: conversationId});	
+				return self.findPromise.promise;
 			};
 
 		}
