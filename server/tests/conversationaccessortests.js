@@ -9,7 +9,7 @@ describe('conversationAccessor', function(){
 			ca.clearTests().then(function() {
 				var obj = { title: "test", isTest: true};
 				ca.save(obj).then(function(result) {					
-					ca.find(result._id).then(function(result2) {
+					ca.find(result._id.toString()).then(function(result2) {
 						assert.equal(result.title, result2.title);
 						done();
 					});					

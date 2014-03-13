@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-var q = require('q');
-var MongoClient = require('mongodb').MongoClient;
+var q = require('q'),
+    MongoClient = require('mongodb').MongoClient,
+    ObjectID = require('mongodb').ObjectID;
 
 var singleton = { db: null, url: "mongodb://localhost:27017/conversations" };
 
@@ -25,6 +26,15 @@ singleton.getDB = function() {
     }
 
     return deferred.promise;
+};
+
+singleton.makeObjectId = function(id) {
+    if (typeof id === 'string')
+    {
+        // convert to object id
+        id = new ObjectID(id);
+    }
+    return id;
 };
 
 // Save a record to the database
@@ -51,6 +61,9 @@ singleton.save = function(collectionName, item) {
 
 // Find a record to the database
 singleton.find = function(collectionName, id) {
+
+    id = singleton.makeObjectId(id);
+
     var deferred = q.defer();
 
     singleton.getDB().then(function(db) {
