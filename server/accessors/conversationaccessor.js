@@ -7,7 +7,7 @@ var q = require('q'),
 
 var singleton = { };
 
-singleton.find = function(id) {
+singleton.find = function(id) {	
 	return db.find(collection, id);
 };
 

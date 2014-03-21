@@ -13,7 +13,7 @@ function ConversationManager() {
 	    	});
 	    });
 
-	    socket.on('addMessage', function(data) {
+	    socket.on('sendMessage', function(data) {
 	    	ca.find(data.id).then(function(conversation) {
 
 	    		var message = { conversationId: data.id, isTest: false, message: data.message };

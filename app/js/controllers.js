@@ -5,38 +5,64 @@
 angular.module('chat.controllers', []).
   controller('ConversationsCtrl', 
   	['$scope', '$routeParams', '$location', '$rootScope', 'ConversationApi', 'UserApi', 
-  	function($scope, $routeParmas, $location, $rootScope, conversationApi, userApi) {
+  	function($scope, $routeParams, $location, $rootScope, conversationApi, userApi) {
 
 	  	conversationApi.init();
 
 	  	$scope.myUserId = userApi.myUserId();
 
 	  	$scope.conversations = conversationApi.activeConversations();
-	  	$scope.conversation = { title: "--"};
+	  	$scope.conversation = null;
 
-	  	$scope.messages = [
-	  		{id: 1, message: 'hello', userId: 1, userImage: "/img/user.png"},
-	  		{id: 2, message: 'hello', userId: 2, userImage: "/img/user.png"}
-	  	];
+		$scope.messages = [];
+	  	if ($routeParams.id === "new") {
+	  		$scope.conversation = { title: ""};		  	
+	  	} else {
+	  		conversationApi.find($routeParams.id).then(function(conversation) {
+	  			$scope.conversation = conversation;	
+	  			conversationApi.findMessages($routeParams.id).then(function(messages) {
+	  				$scope.messages = messages;
+	  			});
+	  		});	  		
+	  	}
+
+
+//	  	$scope.messages = [
+//	  		{id: 1, message: 'hello', userId: 1, userImage: "/img/user.png"},
+//	  		{id: 2, message: 'hello', userId: 2, userImage: "/img/user.png"}
+//	  	];
 
 	  	$scope.newMessageText = "";
 
-	  	console.log("route id = " + $routeParmas.id);
+	  	console.log("route id = " + $routeParams.id);
 
-	  	$scope.newMessage = function() {
+
+
+	  	$scope.sendMessage = function() {
 	  		
-	  		conversationApi.addMessage($scope.conversation, $scope.newMessageText);
+	  		var redirect = $routeParams.id === "new";
+	  		conversationApi.sendMessage($scope.conversation, $scope.newMessageText).then(function(conversation) {
+	  			if (redirect) {
+	  				$location.path("/conversations/" + conversation._id);	
+	  			}
+	  		});
 
 	  	};
 
-	  	$scope.open = function(conversation) {	  	
-	  		console.log('open');
+	  	$scope.open = function(conversation) {	  		  		
 	  		$location.path("/conversations/" + conversation._id);		
 	  		return false;
 	  	};
 
-	  	conversationApi.find($routeParmas.id).then(function(conversation) {
+	  	$scope.newConversation = function() {
+	  		$location.path("/conversations/new");
+	  	};
+
+	  	conversationApi.find($routeParams.id).then(function(conversation) {
 	  		console.log("found " + conversation._id);
 	  	});
+
+
+
 
   }]);

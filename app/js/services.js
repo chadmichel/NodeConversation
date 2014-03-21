@@ -1,9 +1,5 @@
 'use strict';
 
-
-
-
-
 // Demonstrate how to register services
 // In this case it is a simple value service.
 angular.module('chat.services', ['ngSocket'])
@@ -85,7 +81,7 @@ angular.module('chat.services', ['ngSocket'])
 					}
 				});
 
-				self.socket.on('addMessage_result', function(data) {
+				self.socket.on('sendMessage_result', function(data) {
 					console.log("message result");
 				});
 
@@ -100,9 +96,9 @@ angular.module('chat.services', ['ngSocket'])
 				return self.conversations;
 			};
 
-			self.addMessage = function(conversation, message) {				
+			self.sendMessage = function(conversation, message) {				
 				userApi.myUserId();
-				self.socket.emit('addMessage', {id: conversation._id, message: message});
+				self.socket.emit('sendMessage', {id: conversation._id, message: message});
 			};
 
 			self.find = function(conversationId) {

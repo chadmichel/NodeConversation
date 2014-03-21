@@ -23,6 +23,8 @@
 <div class="col-md-6 col-sm-6">
   <div class="list-group">
 
+    <a class="list-group-item" ng-click="newConversation()">* New Conversation * </a> 
+
     <a class="list-group-item" 
       ng-repeat="conversation in conversations"
       ng-click="open(conversation)"
@@ -34,7 +36,7 @@
 <div class="col-md-6 col-sm-6">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">{{conversation.title}}</h3>
+      Title: <input value={{conversation.title}} style="width: 100%" />      
     </div>
     <div class="panel-body">
       <div>
@@ -54,7 +56,7 @@
 
       <div>
 
-          <form role="form" ng-submit="newMessage()">
+          <form role="form" ng-submit="sendMessage()">
 
               <textarea rows="10" class="form-control" ng-model="$parent.newMessageText"></textarea>
               <button class="btn" type="submit">Send</button>
