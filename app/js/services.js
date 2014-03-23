@@ -9,6 +9,8 @@ angular.module('chat.services', ['ngSocket'])
 		function Comm() {
 			var self = this;
 			self.socket = null;
+			self.cache = {};
+
 
 			self.connect = function() {
 
@@ -19,6 +21,30 @@ angular.module('chat.services', ['ngSocket'])
 					return self.socket;
 				}
 
+				self.socket.on('message', function(packet) {
+					if (self.cache[packet.GUID] != null) {
+						var item = self.cache[packet.GUID];
+						if (item.resultFunction != null) {
+							item.resultFunction(packet.data);
+						}
+					}
+				});
+
+			};
+
+			self.send = function(messageType, data, resultFunction) {
+				var packet = {
+					GUID: createUUID(),
+					MESSAGETYPE: messageType,
+					data: data
+				};
+				
+				self.cache[packet.GUID] = { MESSAGETYPE: messageType, data: data, resultFunction: resultFunction};
+
+				console.log("sending" + packet);
+				console.log(packet);
+				var packetStr = JSON.stringify(packet);
+				self.socket.send(packetStr);
 			};
 		}
 
@@ -51,7 +77,6 @@ angular.module('chat.services', ['ngSocket'])
 			self.socket = null;
 
 			self.conversations = [];
-			self.findPromise = null;
 
 			self.init = function () {
 				self.socket = comm.connect();
@@ -84,12 +109,6 @@ angular.module('chat.services', ['ngSocket'])
 				self.socket.on('sendMessage_result', function(data) {
 					console.log("message result");
 				});
-
-				self.socket.on("findConversation_result", function(data) {
-					console.log("findConversation_result");
-					console.log(data);
-					self.findPromise.resolve(data.conversation);
-				});
 			};
 
 			self.activeConversations = function() {
@@ -98,13 +117,29 @@ angular.module('chat.services', ['ngSocket'])
 
 			self.sendMessage = function(conversation, message) {				
 				userApi.myUserId();
-				self.socket.emit('sendMessage', {id: conversation._id, message: message});
+				var promise = $q.defer();
+
+				var isNew = conversation._id == null;
+
+				comm.send("sendMessage", {id: conversation._id, message: message}, function(result) {
+					if (isNew) {
+						activeConversations.push(result.conversation);
+					}
+					promise.resolve(result);
+				});
+
+				return promise.promise;				
 			};
 
 			self.find = function(conversationId) {
-				self.findPromise = $q.defer();				
-				self.socket.emit("findConversation", { id: conversationId});	
-				return self.findPromise.promise;
+				var findPromise = $q.defer();				
+
+				comm.send("findConversation", { id: conversationId}, function(result) {				
+					console.log(data);
+					self.findPromise.resolve(result.conversation);
+				});
+				
+				return findPromise.promise;
 			};
 
 		}

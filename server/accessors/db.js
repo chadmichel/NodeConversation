@@ -60,24 +60,32 @@ singleton.save = function(collectionName, item) {
 };
 
 // Find a record to the database
-singleton.find = function(collectionName, id) {
-
-    id = singleton.makeObjectId(id);
+singleton.find = function(collectionName, id) {    
 
     var deferred = q.defer();
 
-    singleton.getDB().then(function(db) {
-
-        var collection = db.collection(collectionName);
-        collection.findOne({ _id: id}, function(err, result) {            
-            if (err === null) {
-                deferred.resolve(result);
-            } else {
-                deferred.reject(err);
-            }
+    if (id == null || id == "new") {
+        setTimeout(function() { 
+            deferred.reject("no id");        
         });
-    });
+    }
+    else {
 
+        id = singleton.makeObjectId(id);    
+
+        singleton.getDB().then(function(db) {
+
+            var collection = db.collection(collectionName);
+
+            collection.findOne({ _id: id}, function(err, result) {            
+                if (err === null) {
+                    deferred.resolve(result);
+                } else {
+                    deferred.reject(err);
+                }
+            });
+        });
+    }
     return deferred.promise;   
 };
 

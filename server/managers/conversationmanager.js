@@ -33,6 +33,10 @@ function ConversationManager() {
 	    });
 
 	};
+
+	self.findConversation = function(data) {
+		return ca.find(data.id);
+    };
 }
 
 

@@ -21,10 +21,12 @@
 </div>  
 
 <div class="col-md-6 col-sm-6">
+
   <div class="list-group">
-
     <a class="list-group-item" ng-click="newConversation()">* New Conversation * </a> 
+  </div>
 
+  <div class="list-group">
     <a class="list-group-item" 
       ng-repeat="conversation in conversations"
       ng-click="open(conversation)"
