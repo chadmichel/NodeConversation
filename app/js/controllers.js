@@ -16,7 +16,7 @@ angular.module('chat.controllers', []).
 
 		$scope.messages = [];
 	  	if ($routeParams.id === "new") {
-	  		$scope.conversation = { title: ""};
+	  		$scope.conversation = { title: "new title", isNew: true};
 	  	} else {
 	  		conversationApi.find($routeParams.id).then(function(conversation) {
 	  			$scope.conversation = conversation;

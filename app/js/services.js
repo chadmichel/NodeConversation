@@ -18,18 +18,23 @@ angular.module('chat.services', ['ngSocket'])
 					return self.socket;
 				} else {
 					self.socket = io.connect('http://localhost');
+
+					console.log("listening for message");
+
+					self.socket.on('message', function(packet) {
+						console.log("received packet");
+						console.log(packet);
+						packet = JSON.parse(packet);
+						if (self.cache[packet.GUID] != null) {
+							var item = self.cache[packet.GUID];
+							if (item.resultFunction != null) {
+								item.resultFunction(packet.data);
+							}
+						}
+					});
+
 					return self.socket;
 				}
-
-				self.socket.on('message', function(packet) {
-					if (self.cache[packet.GUID] != null) {
-						var item = self.cache[packet.GUID];
-						if (item.resultFunction != null) {
-							item.resultFunction(packet.data);
-						}
-					}
-				});
-
 			};
 
 			self.send = function(messageType, data, resultFunction) {
@@ -80,34 +85,16 @@ angular.module('chat.services', ['ngSocket'])
 
 			self.init = function () {
 				self.socket = comm.connect();
-				
-				self.socket.on('allActiveForUser_result', function (data) {
-					// we received a conversation update from server. 
-					// Push this update.
 
-					if (data != null && data.conversations != null) {
+				self.refreshList();
+			};
 
-						$rootScope.$apply(function() {
-							self.conversations.length = 0;
-
-							data.conversations.forEach(function(c) {
-								console.log(c.title);
-								self.conversations.push(c);
-							});
-						});
-					}
-				});
-
-				self.socket.on('comm_check', function(data) {	
-					// a basic message has returned from the server, world probably ok.
-					console.log("come check = " + data);
-					if (data == true) {
-						self.socket.emit("allActiveForUser", {hello: "world"});					
-					}
-				});
-
-				self.socket.on('sendMessage_result', function(data) {
-					console.log("message result");
+			self.refreshList = function() {
+				comm.send("findActiveForUser", {userId: userApi.myUserId()}, function(result) {
+					//self.conversations.length = 0;
+					result.conversations.forEach(function(item) { 
+						self.conversations.push(item);
+					});
 				});
 			};
 
@@ -119,11 +106,11 @@ angular.module('chat.services', ['ngSocket'])
 				userApi.myUserId();
 				var promise = $q.defer();
 
-				var isNew = conversation._id == null;
+				var isNew = conversation.isNew;				
 
-				comm.send("sendMessage", {id: conversation._id, message: message}, function(result) {
+				comm.send("sendMessage", {conversation: conversation, message: message, userId: userApi.myUserId()}, function(result) {
 					if (isNew) {
-						activeConversations.push(result.conversation);
+						self.conversations.push(result.conversation);
 					}
 					promise.resolve(result);
 				});

@@ -61,11 +61,30 @@ HttpServer.prototype.start = function(port) {
             console.log("got a message", packet.MESSAGETYPE);
 
             switch(packet.MESSAGETYPE) {
+                case "findActiveForUser":
+                    server.cm.findActiveForUser(packet.data.userId).then(function(conversations) {
+                        console.log("sending back list");
+                        packet.data.conversations = conversations;
+                        var packetStr = JSON.stringify(packet);
+                        socket.send(packetStr); 
+                    });
+                    break;
+
                 case "findConversation":
                     server.cm.findConversation(packet.data).then(function(conversation) {
                         console.log("sending back");
                         packet.conversation = conversation;
-                        socket.send(packet); 
+                        var packetStr = JSON.stringify(packet);
+                        socket.send(packetStr); 
+                    });
+                    break;
+                case "sendMessage":
+                    console.log("sendMesage handler");
+                    server.cm.sendMessage(packet.data).then(function(result) {
+                        console.log("sending back");
+                        packet.result = result;
+                        var packetStr = JSON.stringify(packet);
+                        socket.send(packetStr); 
                     });
                     break;
             }
