@@ -64,7 +64,7 @@ HttpServer.prototype.start = function(port) {
                 case "findActiveForUser":
                     server.cm.findActiveForUser(packet.data.userId).then(function(conversations) {
                         console.log("sending back list");
-                        packet.data.conversations = conversations;
+                        packet.result = {conversations: conversations};
                         var packetStr = JSON.stringify(packet);
                         socket.send(packetStr); 
                     });
@@ -73,7 +73,7 @@ HttpServer.prototype.start = function(port) {
                 case "findConversation":
                     server.cm.findConversation(packet.data).then(function(conversation) {
                         console.log("sending back");
-                        packet.conversation = conversation;
+                        packet.result = {conversation: conversation};
                         var packetStr = JSON.stringify(packet);
                         socket.send(packetStr); 
                     });

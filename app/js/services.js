@@ -4,7 +4,7 @@
 // In this case it is a simple value service.
 angular.module('chat.services', ['ngSocket'])
 
-	.service('Comm', function() {
+	.service('Comm', ['$rootScope', function($rootScope) {
 
 		function Comm() {
 			var self = this;
@@ -22,15 +22,19 @@ angular.module('chat.services', ['ngSocket'])
 					console.log("listening for message");
 
 					self.socket.on('message', function(packet) {
-						console.log("received packet");
-						console.log(packet);
-						packet = JSON.parse(packet);
-						if (self.cache[packet.GUID] != null) {
-							var item = self.cache[packet.GUID];
-							if (item.resultFunction != null) {
-								item.resultFunction(packet.data);
-							}
-						}
+
+						setTimeout(function() { 
+
+							$rootScope.$apply(function() {
+								packet = JSON.parse(packet);
+								if (self.cache[packet.GUID] != null) {
+									var item = self.cache[packet.GUID];
+									if (item.resultFunction != null) {
+										item.resultFunction(packet.result);
+									}
+								}
+							});
+						});
 					});
 
 					return self.socket;
@@ -57,7 +61,7 @@ angular.module('chat.services', ['ngSocket'])
 
 		return c;
 
-	})
+	}])
 
 	.service('UserApi', ['$window', 'ngWebSocket', '$rootScope', function($window, ngWebSocket, $rootScope) {
 
@@ -112,7 +116,7 @@ angular.module('chat.services', ['ngSocket'])
 					if (isNew) {
 						self.conversations.push(result.conversation);
 					}
-					promise.resolve(result);
+					promise.resolve(result.result);
 				});
 
 				return promise.promise;				
@@ -121,12 +125,21 @@ angular.module('chat.services', ['ngSocket'])
 			self.find = function(conversationId) {
 				var findPromise = $q.defer();				
 
-				comm.send("findConversation", { id: conversationId}, function(result) {				
-					console.log(data);
-					self.findPromise.resolve(result.conversation);
+				comm.send("findConversation", { id: conversationId}, function(result) {					
+					findPromise.resolve(result.conversation);
 				});
 				
 				return findPromise.promise;
+			};
+
+			self.findMessages = function(conversationId) {
+				var promise = $q.defer();
+
+				comm.send("findMessages", { conversationId: conversationId }, function(result) {
+					promise.resolve({conversationId: conversationId, messages: result.messages});
+				});
+
+				return promise.promise;				
 			};
 
 		}

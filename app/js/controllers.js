@@ -7,36 +7,15 @@ angular.module('chat.controllers', []).
   	['$scope', '$routeParams', '$location', '$rootScope', 'ConversationApi', 'UserApi',
   	function($scope, $routeParams, $location, $rootScope, conversationApi, userApi) {
 
-	  	conversationApi.init();
-
-	  	$scope.myUserId = userApi.myUserId();
-
-	  	$scope.conversations = conversationApi.activeConversations();
-	  	$scope.conversation = null;
-
-		$scope.messages = [];
-	  	if ($routeParams.id === "new") {
-	  		$scope.conversation = { title: "new title", isNew: true};
-	  	} else {
-	  		conversationApi.find($routeParams.id).then(function(conversation) {
-	  			$scope.conversation = conversation;
-	  			conversationApi.findMessages($routeParams.id).then(function(messages) {
-	  				$scope.messages = messages;
-	  			});
-	  		});
-	  	}        
-
-	  	$scope.newMessageText = "";
-
-	  	console.log("route id = " + $routeParams.id);
-
+		conversationApi.init();	 
 
 	  	$scope.sendMessage = function() {
 
 	  		var redirect = $routeParams.id === "new";
-	  		conversationApi.sendMessage($scope.conversation, $scope.newMessageText).then(function(conversation) {
-	  			if (redirect) {
-	  				$location.path("/conversations/" + conversation._id);
+	  		conversationApi.sendMessage($scope.conversation, $scope.newMessageText).then(function(result) {
+	  			
+	  			if (redirect && result != null && result.conversation != null && result.conversation._id != null) {
+	  				$location.path("/conversations/" + result.conversation._id);
 	  			}
 	  		});
 
@@ -51,9 +30,32 @@ angular.module('chat.controllers', []).
 	  		$location.path("/conversations/new");
 	  	};
 
-	  	conversationApi.find($routeParams.id).then(function(conversation) {
-	  		console.log("found " + conversation._id);
-	  	});
+	  	$scope.myUserId = userApi.myUserId();
+
+	  	$scope.conversations = conversationApi.activeConversations();
+	  	$scope.conversation = null;
+
+		$scope.messages = [];
+	  	if ($routeParams.id === "new") {
+	  		$scope.conversation = { title: "new title", isNew: true, userId: userApi.myUserId()};
+	  	} else {
+	  		conversationApi.find($routeParams.id).then(function(conversation) {
+	  			if (conversation == null) {
+	  				$scope.newConversation();
+	  			} else {
+		  			$scope.conversation = conversation;
+		  			conversationApi.findMessages($routeParams.id).then(function(messages) {
+		  				$scope.messages = messages;
+		  			});
+	  			}
+	  		});
+	  	}        
+
+	  	$scope.newMessageText = "";
+
+	  	console.log("route id = " + $routeParams.id);
+
+
 
 
 
