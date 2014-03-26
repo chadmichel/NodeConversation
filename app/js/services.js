@@ -107,7 +107,6 @@ angular.module('chat.services', ['ngSocket'])
 			};
 
 			self.sendMessage = function(conversation, message) {				
-				userApi.myUserId();
 				var promise = $q.defer();
 
 				var isNew = conversation.isNew;				
