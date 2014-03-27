@@ -19,6 +19,10 @@ singleton.findActiveForUser = function(userId) {
 	return db.findMany(collection, { "users.id": userId });
 };
 
+singleton.findActive = function() {
+	return db.findMany(collection, { });
+};
+
 singleton.clearTests = function() {
 	return db.clear(collection, { isTest: true})
 };

@@ -14,6 +14,10 @@ function ConversationManager() {
     	return ca.findActiveForUser(userId);
     };
 
+    self.findActive = function() {
+    	return ca.findActive();
+    };
+
     self._addMessage = function(conversationId, messageText, userId) {
     	var message = { conversationId: conversationId, isTest: false, message: messageText, userId: userId };
     	return ma.save(message); // returns promise

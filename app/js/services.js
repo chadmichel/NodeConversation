@@ -94,7 +94,7 @@ angular.module('chat.services', ['ngSocket'])
 			};
 
 			self.refreshList = function() {
-				comm.send("findActiveForUser", {userId: userApi.myUserId()}, function(result) {
+				comm.send("findActive", {userId: userApi.myUserId()}, function(result) {
 					//self.conversations.length = 0;
 					result.conversations.forEach(function(item) { 
 						self.conversations.push(item);

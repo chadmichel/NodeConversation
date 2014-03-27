@@ -70,6 +70,15 @@ HttpServer.prototype.start = function(port) {
                     });
                     break;
 
+               case "findActive":
+                    server.cm.findActive().then(function(conversations) {
+                        console.log("sending back list");
+                        packet.result = {conversations: conversations};
+                        var packetStr = JSON.stringify(packet);
+                        socket.send(packetStr); 
+                    });
+                    break;                    
+
                 case "findConversation":
                     server.cm.findConversation(packet.data).then(function(conversation) {
                         console.log("sending back");
