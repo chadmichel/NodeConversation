@@ -55,9 +55,4 @@ angular.module('chat.controllers', []).
 
 	  	console.log("route id = " + $routeParams.id);
 
-
-
-
-
-
   }]);

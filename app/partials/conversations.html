@@ -38,7 +38,7 @@
 <div class="col-md-6 col-sm-6">
   <div class="panel panel-default">
     <div class="panel-heading">
-      Title: <input value={{conversation.title}} style="width: 100%" />      
+      Title: <input ng-model=conversation.title style="width: 100%" />      
     </div>
     <div class="panel-body">
       <div>
@@ -60,7 +60,7 @@
 
           <form role="form" ng-submit="sendMessage()">
 
-              <textarea rows="10" class="form-control" ng-model="$parent.newMessageText"></textarea>
+              <textarea rows="10" class="form-control" ng-model="newMessageText"></textarea>
               <button class="btn" type="submit">Send</button>
 
           </form>
