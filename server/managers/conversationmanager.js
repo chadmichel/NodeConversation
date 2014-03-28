@@ -26,35 +26,37 @@ function ConversationManager() {
     self.sendMessage = function(data) {
     	var promise = q.defer(); 
 
-    	if (data.conversation.isNew == true) {
-    		var conversation = {
-    			title: data.conversation.title.toString(),
-    			userId: data.userId
-    		};
-    		ca.save(conversation).then(function(conversation) {
-    			self._addMessage(conversation._id, data.message, data.userId).then(function(message) {
-    				data.result = {
-    					inserted: true,
-    					conversation: conversation,
-    					message: message
-    				};
+    	setTimeout(function() { 
+	    	if (data.conversation.isNew == true) {
+	    		var conversation = {
+	    			title: data.conversation.title.toString(),
+	    			userId: data.userId
+	    		};
+	    		ca.save(conversation).then(function(conversation) {
+	    			self._addMessage(conversation._id, data.message, data.userId).then(function(message) {
+	    				data.result = {
+	    					inserted: true,
+	    					conversation: conversation,
+	    					message: message
+	    				};
 
-    				promise.resolve(data);
-    			});
-    		});
-    	} else {
-	    	ca.find(data.id).then(function(conversation) {
-	    		self._addMessage(conversation._id, data.message, data.userId).then(function(message) {
-	    			data.result = {
-						inserted: true,
-						conversation: conversation,
-						message: message
-	    			};
-
-	    			promise.resolve(data);
+	    				promise.resolve(data);
+	    			});
 	    		});
-	    	});
-		}
+	    	} else {
+		    	ca.find(data.conversation._id).then(function(conversation) {
+		    		self._addMessage(conversation._id, data.message, data.userId).then(function(message) {
+		    			data.result = {
+							inserted: true,
+							conversation: conversation,
+							message: message
+		    			};
+
+		    			promise.resolve(data);
+		    		});
+		    	});
+			}
+		});
     	return promise.promise;
     };
 }

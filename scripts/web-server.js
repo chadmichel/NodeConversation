@@ -93,6 +93,7 @@ HttpServer.prototype.start = function(port) {
                         console.log("sending back");
                         packet.result = result;
                         var packetStr = JSON.stringify(packet);
+                        console.log("send back after send message");
                         socket.send(packetStr); 
                     });
                     break;

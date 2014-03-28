@@ -115,7 +115,10 @@ angular.module('chat.services', ['ngSocket'])
 					if (isNew) {
 						self.conversations.push(result.conversation);
 					}
-					promise.resolve(result.result);
+
+					$rootScope.$emit("receiveMessage", result.message);
+
+					promise.resolve(result.result);					
 				});
 
 				return promise.promise;				
