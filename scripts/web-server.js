@@ -44,63 +44,10 @@ HttpServer.prototype.start = function(port) {
   this.port = port;
   this.server.listen(port);
   util.puts('Http Server running at http://localhost:' + port + '/');
-
-  this.io = require('socket.io').listen(this.server);  
   
-  server.cm = new require('../server/managers/conversationmanager.js');
-
-  this.io.sockets.on('connection', function(socket) {
-
-    socket.userId = 1;
-    socket.emit("comm_check", true);
-
-        // initialize managers
-        socket.on("message", function(packet) {
-            packet = JSON.parse(packet);
-            console.log("got a message", packet.GUID);
-            console.log("got a message", packet.MESSAGETYPE);
-
-            switch(packet.MESSAGETYPE) {
-                case "findActiveForUser":
-                    server.cm.findActiveForUser(packet.data.userId).then(function(conversations) {
-                        console.log("sending back list");
-                        packet.result = {conversations: conversations};
-                        var packetStr = JSON.stringify(packet);
-                        socket.send(packetStr); 
-                    });
-                    break;
-
-               case "findActive":
-                    server.cm.findActive().then(function(conversations) {
-                        console.log("sending back list");
-                        packet.result = {conversations: conversations};
-                        var packetStr = JSON.stringify(packet);
-                        socket.send(packetStr); 
-                    });
-                    break;                    
-
-                case "findConversation":
-                    server.cm.findConversation(packet.data).then(function(conversation) {
-                        console.log("sending back");
-                        packet.result = {conversation: conversation};
-                        var packetStr = JSON.stringify(packet);
-                        socket.send(packetStr); 
-                    });
-                    break;
-                case "sendMessage":
-                    console.log("sendMesage handler");
-                    server.cm.sendMessage(packet.data).then(function(result) {
-                        console.log("sending back");
-                        packet.result = result;
-                        var packetStr = JSON.stringify(packet);
-                        console.log("send back after send message");
-                        socket.send(packetStr); 
-                    });
-                    break;
-            }
-      });   
-    });   
-};
+  server.switchboard = new require("../server/switchboard.js");
+  server.switchboard.listen(this.server);
+}
 
 HttpServer.prototype.parseUrl_ = function(urlString) {
   var parsed = url.parse(urlString);

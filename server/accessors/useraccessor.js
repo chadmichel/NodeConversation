@@ -23,4 +23,8 @@ singleton.clearTests = function() {
 	return db.clear(collection, { isTest: true})
 };
 
+singleton.findByEmail= function(email) {
+    return db.findMany(collection, { "email": email });
+};
+
 module.exports = singleton;

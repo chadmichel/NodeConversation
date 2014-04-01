@@ -2,8 +2,15 @@
 
 /* Controllers */
 
-angular.module('chat.controllers', []).
-  controller('ConversationsCtrl',
+angular.module('chat.controllers', [])
+
+	.controller("AuthCtrl", 
+	['$scope', '$routeParams', '$location', '$rootScope', 'UserApi',
+  	function($scope, $routeParams, $location, $rootScope, userApi) {	
+
+  	}])
+
+  	.controller('ConversationsCtrl',
   	['$scope', '$routeParams', '$location', '$rootScope', 'ConversationApi', 'UserApi',
   	function($scope, $routeParams, $location, $rootScope, conversationApi, userApi) {
 
@@ -14,9 +21,11 @@ angular.module('chat.controllers', []).
 	  		var redirect = $routeParams.id === "new";
 	  		conversationApi.sendMessage($scope.conversation, $scope.newMessageText).then(function(result) {
 	  			
-	  			if (redirect && result != null && result.conversation != null && result.conversation._id != null) {
+	  			if (redirect && result != null && result.conversation != null && result.conversation._id != null) {	  				
 	  				$location.path("/conversations/" + result.conversation._id);
 	  			}
+
+	  			$scope.newMessageText = "";
 	  		});
 
 	  	};
@@ -56,7 +65,8 @@ angular.module('chat.controllers', []).
 	  	console.log("route id = " + $routeParams.id);
 
 	  	$rootScope.$on('receiveMessage', function(event, args) {
-	  		alert('new message');
+	  		console.log(args);
+	  		$scope.messages.push(args.message);
 	  	});
 
   }]);

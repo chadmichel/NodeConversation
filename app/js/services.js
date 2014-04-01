@@ -58,7 +58,6 @@ angular.module('chat.services', ['ngSocket'])
 		}
 
 		var c = new Comm();
-
 		return c;
 
 	}])
@@ -83,12 +82,12 @@ angular.module('chat.services', ['ngSocket'])
 
 		function ConversationApi() {
 			var self = this;
-			self.socket = null;
+			//self.socket = null;
 
 			self.conversations = [];
 
 			self.init = function () {
-				self.socket = comm.connect();
+				//self.socket = comm.connect();
 
 				self.refreshList();
 			};
@@ -116,7 +115,7 @@ angular.module('chat.services', ['ngSocket'])
 						self.conversations.push(result.conversation);
 					}
 
-					$rootScope.$emit("receiveMessage", result.message);
+					$rootScope.$emit("receiveMessage", result.result);
 
 					promise.resolve(result.result);					
 				});

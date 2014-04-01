@@ -14,6 +14,10 @@ config(['$routeProvider', function($routeProvider) {
   	{templateUrl: 'partials/conversations.html', controller: 'ConversationsCtrl'});  
   $routeProvider.when('/poop', 
   	{templateUrl: 'partials/conversations.html', controller: 'ConversationsCtrl'});  
+
+  $routeProvider.when('/poop', 
+    {templateUrl: 'partials/login.html', controller: 'AuthCtrl'});  
+
   
-  //$routeProvider.otherwise({redirectTo: '/conversations/0'});
+  $routeProvider.otherwise({redirectTo: '/conversations/new'});
 }]);
