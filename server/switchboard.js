@@ -54,7 +54,7 @@ function Switchboard() {
                         console.log("send back after send message");
                         socket.send(packetStr); 
                     });
-                    break;
+                    break;                
                 }
             });   
         });          

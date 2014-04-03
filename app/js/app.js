@@ -12,8 +12,8 @@ angular.module('chat', [
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/conversations/:id', 
   	{templateUrl: 'partials/conversations.html', controller: 'ConversationsCtrl'});  
-  $routeProvider.when('/poop', 
-  	{templateUrl: 'partials/conversations.html', controller: 'ConversationsCtrl'});  
+  $routeProvider.when('/users/auth', 
+  	{templateUrl: 'partials/auth.html', controller: 'UserCtrl'});  
 
   $routeProvider.when('/poop', 
     {templateUrl: 'partials/login.html', controller: 'AuthCtrl'});  

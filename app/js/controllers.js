@@ -4,15 +4,21 @@
 
 angular.module('chat.controllers', [])
 
-	.controller("AuthCtrl", 
+	.controller("UserCtrl", 
 	['$scope', '$routeParams', '$location', '$rootScope', 'UserApi',
   	function($scope, $routeParams, $location, $rootScope, userApi) {	
+
 
   	}])
 
   	.controller('ConversationsCtrl',
   	['$scope', '$routeParams', '$location', '$rootScope', 'ConversationApi', 'UserApi',
   	function($scope, $routeParams, $location, $rootScope, conversationApi, userApi) {
+
+  		if (!userApi.loggedIn()) {
+			$location.path("/users/auth");
+			return;  			
+  		}
 
 		conversationApi.init();	 
 

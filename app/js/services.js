@@ -55,6 +55,8 @@ angular.module('chat.services', ['ngSocket'])
 				var packetStr = JSON.stringify(packet);
 				self.socket.send(packetStr);
 			};
+
+			self.connect();
 		}
 
 		var c = new Comm();
@@ -66,10 +68,17 @@ angular.module('chat.services', ['ngSocket'])
 
 		function UserApi() {
 			var self = this;
-			self.myUser = {id: 1};
+			self.myUser = {id: 0};
 
 			self.myUserId = function() {
 				return self.myUser.id;
+			};
+
+			self.loggedIn = function() {
+				if (self.myUser.id != null && self.myUser.id > 0) {
+					return true;
+				}
+				return false;
 			};
 		}
 
