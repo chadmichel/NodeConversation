@@ -64,7 +64,7 @@ angular.module('chat.services', ['ngSocket'])
 
 	}])
 
-	.service('UserApi', ['$window', 'ngWebSocket', '$rootScope', function($window, ngWebSocket, $rootScope) {
+	.service('UserApi', ['$window', 'ngWebSocket', '$rootScope', 'Comm', function($window, ngWebSocket, $rootScope, comm) {
 
 		function UserApi() {
 			var self = this;
@@ -80,6 +80,12 @@ angular.module('chat.services', ['ngSocket'])
 				}
 				return false;
 			};
+
+            self.login = function(username, password) {
+                comm.send("login", {username: username, password: password}, function(result) {
+
+                });
+            };
 		}
 
 		return new UserApi();

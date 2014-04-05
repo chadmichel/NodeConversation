@@ -1,4 +1,5 @@
-var cm = new require('../server/managers/conversationmanager.js');
+var cm = new require('../server/managers/conversationmanager.js'),
+    um = new require('../server/managers/usermanager.js');
     
 
 function Switchboard() {
@@ -54,7 +55,17 @@ function Switchboard() {
                         console.log("send back after send message");
                         socket.send(packetStr); 
                     });
-                    break;                
+                    break;     
+                case "login":
+                    console.log("login");  
+                    um.login(packet.data, socket).then(function(result) {
+                        console.log("sending back");
+                        packet.result = result;
+                        var packetStr = JSON.stringify(packet);
+                        console.log("send back after send message");
+                        socket.send(packetStr); 
+                    });                  
+                    break;           
                 }
             });   
         });          

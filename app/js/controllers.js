@@ -8,7 +8,18 @@ angular.module('chat.controllers', [])
 	['$scope', '$routeParams', '$location', '$rootScope', 'UserApi',
   	function($scope, $routeParams, $location, $rootScope, userApi) {	
 
+          $scope.username = "";
+          $scope.passworld = "";
+          $scope.newUsername = "";
+          $scope.newPassword = "";
 
+          $scope.login = function() {
+              userApi.login($scope.username, $scope.password);
+          };
+
+          $scope.createUser = function() {
+              userApi.createUser($scope.newUsername, $scope.newPassword);
+          };
   	}])
 
   	.controller('ConversationsCtrl',
