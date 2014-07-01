@@ -1,10 +1,16 @@
-#!/usr/bin/env node
+(function() {
+    "use strict";
 
 var q = require('q'),
     MongoClient = require('mongodb').MongoClient,
     ObjectID = require('mongodb').ObjectID;
 
-var singleton = { db: null, url: "mongodb://localhost:27017/conversations" };
+var singleton = { db: null, url: "mongodb://localhost:27017/conversations", isTest: false };
+
+singleton.useTest = function() {
+    singleton.url = "mongodb://localhost:27017/conversationstests";
+    singleton.isTest = true;
+};
 
 // retrieve a database context.
 singleton.getDB = function() {
@@ -39,7 +45,17 @@ singleton.makeObjectId = function(id) {
 
 // Save a record to the database
 singleton.save = function(collectionName, item) {
+
     var deferred = q.defer();
+
+    if (item != null && singleton.isTest) {
+        item.isTest = true;
+    }
+
+    if (item != null) {
+        if (item._id != null && item._id.toString().length == 0)
+            item._id = null;
+    }
 
     singleton.getDB().then(function(db) {
 
@@ -153,3 +169,5 @@ singleton.close = function() {
 };
 
 module.exports = singleton;
+
+}());

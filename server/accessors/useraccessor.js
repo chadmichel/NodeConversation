@@ -1,30 +1,33 @@
-#!/usr/bin/env node
+(function() {
+    "use strict";
 
 var q = require('q'),
-	db = require('./db'),
-	collection = "users";
+    db = require('./db'),
+    collection = "users";
 
 
 var singleton = { };
 
 singleton.find = function(id) {
-	return db.find(collection, id);
+    return db.find(collection, id);
 };
 
 singleton.save = function(conversation) {
-	return db.save(collection, conversation);
+    return db.save(collection, conversation);
 };
 
 singleton.findAll = function() {
-	return db.findMany(collection);
+    return db.findMany(collection);
 };
 
-singleton.clearTests = function() {
-	return db.clear(collection, { isTest: true})
+singleton.clearAll = function() {
+    return db.clear(collection)
 };
 
-singleton.findByEmail= function(email) {
-    return db.findMany(collection, { "email": email });
+singleton.findByEmail = function(email) {
+    return db.findMany(collection, { email: email });
 };
 
 module.exports = singleton;
+
+}());
