@@ -26,6 +26,7 @@
     <Compile Include="scratch\db.js" />
     <Compile Include="scripts\web-server.js" />
     <Compile Include="server\engines\converters.js" />
+    <Compile Include="server\logger.js" />
     <Compile Include="server\notifier.js" />
     <Compile Include="server\switchboard.js" />
     <Content Include="app\css\app.css" />

@@ -17,7 +17,7 @@ singleton.save = function(conversation) {
 };
 
 singleton.findActiveForUser = function(userId) {
-    return db.findMany(collection, { "users.id": userId });
+    return db.findMany(collection, { "users._id": userId });
 };
 
 singleton.findActive = function() {

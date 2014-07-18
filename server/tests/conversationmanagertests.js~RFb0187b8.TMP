@@ -27,7 +27,9 @@ describe('ConversationManager', function(){
                 });			
             });
         });
+    });
 
+    describe('save', function(){
         it('should save conversation and notify', function(done) {			
 
             logger.info("Conversation Manager: Save: should save conversation and notify");
@@ -49,9 +51,6 @@ describe('ConversationManager', function(){
     
     describe('find', function(){
         it('should find/load conversation', function(done) {			
-
-            logger.info("Conversation Manager: find: should find/load conversation");
-
             ca.clearAll().then(function() {
                 var obj = { conversation: { title: "test123"} };
                 var notifier = new Notifier();
@@ -66,9 +65,6 @@ describe('ConversationManager', function(){
 
     describe('findActive', function(){
         it('should find active conversations', function(done) {			
-
-            logger.info("Conversation Manager: findActive: should find active conversations");
-
             ca.clearAll().then(function() {
                 var obj = { conversation: { title: "test", active: true} };
                 var notifier = new Notifier();
@@ -80,11 +76,10 @@ describe('ConversationManager', function(){
                 });			
             });
         });
+    });
 
+    describe('findActive', function(){
         it('should find no active conversations if none active', function(done) {			
-
-            logger.info("Conversation Manager: findActive: should find no active conversations if none active");
-
             ca.clearAll().then(function() {
                 var obj = { conversation: { title: "test", active: false} };
                 var notifier = new Notifier();
@@ -99,10 +94,7 @@ describe('ConversationManager', function(){
     });
 
     describe('findActiveForUser', function(){
-        it('should find active conversations for user', function(done) {	
-            
-            logger.info("Conversation Manager: findActiveForUser: should find active conversations for user");
-            		
+        it('should find active conversations for user', function(done) {			
             ca.clearAll().then(function() {
                 var obj = { conversation: { title: "test", active: true, users: 
                     [ { id: "1", email: "1@e.com", active: true }, 
@@ -122,9 +114,6 @@ describe('ConversationManager', function(){
 
     describe('findActiveForUser', function(){
         it('should find no active conversations for user', function(done) {			
-
-            logger.info("Conversation Manager: findActiveForUser: should find no active conversations for user");
-
             ca.clearAll().then(function() {
                 var obj = { conversation: { title: "test", active: true, users: 
                     [ { id: "1", email: "1@e.com", active: true }, 
@@ -144,9 +133,6 @@ describe('ConversationManager', function(){
 
     describe('sendMessage', function(){
         it('should save and rebroadcast a new message with existing conversation', function(done) {			
-
-            logger.info("Conversation Manager: sendMessage: should save and rebroadcast a new message with existing conversation");
-
             ca.clearAll().then(function() {
                 var obj = { conversation: { title: "test123"} };
                 cm.saveConversation(obj).then(function(result) {	                    
@@ -171,9 +157,6 @@ describe('ConversationManager', function(){
         });
 
         it('should save and rebroadcast a new message with new conversation', function(done) {	
-
-            logger.info("Conversation Manager: sendMessage: should save and rebroadcast a new message with new conversation");
-
             ca.clearAll().then(function() {
                 var obj = { 
                     isNew: true,
